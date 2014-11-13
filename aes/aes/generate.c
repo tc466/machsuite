@@ -6,6 +6,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <assert.h>
+#include <time.h>
 
 #include "aes.h"
 // Fake benchmark function to satisfy the extern
@@ -20,9 +21,9 @@ void generate_binary()
 
   // Fill data structure
   memset(&data.ctx, 0, sizeof(aes256_context));
-  srandom(1);
+  srandom(time(NULL));
   for(i=0; i<32; i++)
-    data.k[i] = i;
+    data.k[i] = random() % 256;
   memcpy(data.buf, initial_contents, 16);
 
   // Open and write
