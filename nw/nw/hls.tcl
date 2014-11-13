@@ -15,7 +15,7 @@ create_clock -period 10
 #source ./nw_dir
 #config_rtl -reset all -reset_level low
 csynth_design 
-cosim_design -rtl verilog -tool modelsim
+cosim_design -rtl systemc
 #-trace_level all
 
 exit

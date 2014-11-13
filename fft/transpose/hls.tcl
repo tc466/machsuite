@@ -17,5 +17,5 @@ set_clock_uncertainty 0
 #source ./fft_dir
 config_rtl -reset all -reset_level low
 csynth_design
-cosim_design -tool modelsim -rtl verilog -trace_level all
+cosim_design -tool systemc -trace_level all
 exit

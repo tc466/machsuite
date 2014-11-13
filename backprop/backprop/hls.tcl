@@ -11,10 +11,10 @@ open_solution -reset solution
 set_part virtex7
 create_clock -period 10
 
-#source ./net_dir
+source ./net_dir
 config_rtl -reset all -reset_level low
 
 csynth_design
-cosim_design -rtl verilog -tool modelsim -trace_level all
+#cosim_design -rtl systemc -trace_level all
 
 exit
