@@ -40,7 +40,7 @@ void md_kernel(TYPE d_force_x[nAtoms],
                TYPE position_x[nAtoms], 
                TYPE position_y[nAtoms], 
                TYPE position_z[nAtoms], 
-               TYPE NL[nAtoms*maxNeighbors]) 
+               short NL[nAtoms*maxNeighbors]) 
 {
     TYPE delx, dely, delz, r2inv;
     TYPE r6inv, potential, force, j_x, j_y, j_z;
@@ -66,7 +66,7 @@ loop_j : for( j = 0; j < maxNeighbors; j++){
              delx = i_x - j_x; 
              dely = i_y - j_y; 
              delz = i_z - j_z;
-             r2inv = 1.0/( delx*delx + dely*dely + delz*delz );
+             r2inv = ((TYPE)1.0)/( delx*delx + dely*dely + delz*delz );
              // Assume no cutoff and aways account for all nodes in area
              r6inv = r2inv * r2inv * r2inv;
              potential = r6inv*(lj1*r6inv - lj2);

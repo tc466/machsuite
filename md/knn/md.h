@@ -35,14 +35,21 @@ In Proceedings of the 3rd Workshop on General-Purpose Computation on Graphics Pr
 #include <stdlib.h>
 #include <stdio.h>
 
-#define TYPE double
+#define FIXED_POINT
+
+#ifdef FIXED_POINT
+  #include <ap_fixed.h>
+  #define TYPE ap_fixed<16,8>
+#else
+  #define TYPE double
+#endif
 
 // Problem Constants
 #define nAtoms        256
 #define maxNeighbors  16
 // LJ coefficients
-#define lj1           1.5
-#define lj2           2.0
+#define lj1           ((TYPE)1.5)
+#define lj2           ((TYPE)2.0)
 
 ////////////////////////////////////////////////////////////////////////////////
 // Test harness interface code.
@@ -54,7 +61,7 @@ struct bench_args_t {
   TYPE position_x[nAtoms];
   TYPE position_y[nAtoms];
   TYPE position_z[nAtoms];
-  TYPE NL[nAtoms*maxNeighbors];
+  short NL[nAtoms*maxNeighbors];
 };
 int INPUT_SIZE = sizeof(struct bench_args_t);
 
@@ -64,7 +71,7 @@ void md_kernel(TYPE d_force_x[nAtoms],
                TYPE position_x[nAtoms],
                TYPE position_y[nAtoms],
                TYPE position_z[nAtoms],
-               TYPE NL[nAtoms*maxNeighbors]);
+               short NL[nAtoms*maxNeighbors]);
 
 void run_benchmark( void *vargs ) {
   struct bench_args_t *args = (struct bench_args_t *)vargs;

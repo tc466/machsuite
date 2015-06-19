@@ -17,13 +17,13 @@
 #set_directive_array_partition -factor 64 -type cyclic md_kernel position_z
 #set_directive_array_partition -factor 64 -type cyclic md_kernel NL
 
-#set_directive_unroll -factor 8 md_kernel/loopi
-#set_directive_unroll -factor 8 md_kernel/loopj
+#set_directive_unroll -factor 8 md_kernel/loop_i
+#set_directive_unroll -factor 8 md_kernel/loop_j
 
-#set_directive_loop_flatten md_kernel/loopj
-#set_directive_loop_flatten md_kernel/loopj
+#set_directive_loop_flatten md_kernel/loop_j
+#set_directive_loop_flatten md_kernel/loop_j
 
-#set_directive_pipeline md_kernel/loopi
-#set_directive_pipeline md_kernel/loopj
+#set_directive_pipeline md_kernel/loop_i
+set_directive_pipeline md_kernel/loop_j
 
-set_directive_resource -core Mul "md_kernel" mult
+#set_directive_resource -core Mul "md_kernel" mult
