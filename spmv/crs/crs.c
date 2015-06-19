@@ -34,11 +34,14 @@ http://www.cs.berkeley.edu/~mhoemmen/matrix-seminar/slides/UCB_sparse_tutorial_1
 
 #include "crs.h"
 
-void spmv(TYPE val[NNZ], int cols[NNZ], int rowDelimiters[N+1], TYPE vec[N], TYPE out[N]){
+void spmv(int config[2], TYPE val[NNZ_MAX], int cols[NNZ_MAX], int rowDelimiters[N_MAX+1], TYPE vec[N_MAX], TYPE out[N_MAX]){
     int i, j;
     TYPE sum, Si;
+    int n = config[0];
+    int nnz = config[1];
+    printf("%d %d\n", n, nnz);
 
-    spmv_1 : for(i = 0; i < N; i++){
+    spmv_1 : for(i = 0; i < n; i++){
         sum = 0; Si = 0;
         int tmp_begin = rowDelimiters[i];
         int tmp_end = rowDelimiters[i+1];

@@ -37,29 +37,38 @@ http://www.cs.berkeley.edu/~mhoemmen/matrix-seminar/slides/UCB_sparse_tutorial_1
 
 //#define NNZ 2474
 //#define N 662
-#define NNZ 1666
-#define N 494
+#define NNZ_MAX 65536
+#define N_MAX 1024
+//#define NNZ 1666
+//#define N 494
 
-#define TYPE double
+#define FIXED_POINT
 
-void spmv(TYPE val[NNZ], int cols[NNZ], int rowDelimiters[N + 1],
-          TYPE vec[N], TYPE out[N]);
+#ifdef FIXED_POINT
+  #define TYPE int
+#else
+  #define TYPE double
+#endif
+
+void spmv(int config[2], TYPE val[NNZ_MAX], int cols[NNZ_MAX], int rowDelimiters[N_MAX + 1],
+          TYPE vec[N_MAX], TYPE out[N_MAX]);
 ////////////////////////////////////////////////////////////////////////////////
 // Test harness interface code.
 
 struct bench_args_t {
-  TYPE val[NNZ];
-  int cols[NNZ];
-  int rowDelimiters[N+1];
-  TYPE vec[N];
-  TYPE out[N];
+  int config[2];
+  TYPE val[NNZ_MAX];
+  int cols[NNZ_MAX];
+  int rowDelimiters[N_MAX+1];
+  TYPE vec[N_MAX];
+  TYPE out[N_MAX];
 };
 int INPUT_SIZE = sizeof(struct bench_args_t);
 
 
 void run_benchmark( void *vargs ) {
   struct bench_args_t *args = (struct bench_args_t *)vargs;
-  spmv( args->val, args->cols, args->rowDelimiters, args->vec, args->out );
+  spmv( args->config, args->val, args->cols, args->rowDelimiters, args->vec, args->out );
 }
 
 ////////////////////////////////////////////////////////////////////////////////

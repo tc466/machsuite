@@ -6,14 +6,15 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <assert.h>
+#include <time.h>
 
-#define FROM_FILE
-//#define FROM_RANDOM
+//#define FROM_FILE
+#define FROM_RANDOM
 
 #include "crs.h"
 // Fake benchmark function to satisfy the extern
-void spmv(TYPE val[NNZ], int cols[NNZ], int rowDelimiters[N + 1],
-          TYPE vec[N], TYPE out[N]) { }
+void spmv(int config[2], TYPE val[NNZ_MAX], int cols[NNZ_MAX], int rowDelimiters[N_MAX + 1],
+          TYPE vec[N_MAX], TYPE out[N_MAX]) { }
 
 #define ROW 0
 #define COL 1
@@ -46,9 +47,16 @@ void generate_binary()
   struct bench_args_t data;
   char *ptr;
   int status, nnz, i, pos, unique, fd, written=0;
-  int linear_positions[NNZ];
+  int NNZ, N;
+  int linear_positions[NNZ_MAX];
 
-  srandom(1);
+  srandom(time(NULL));
+
+  // generate random size
+  N = N_MAX;
+  NNZ = random() % NNZ_MAX;
+  if (NNZ * 100 < NNZ_MAX)
+    NNZ = NNZ_MAX / 100;
 
   // Find NNZ unique positions
   memset(linear_positions, 0, NNZ*sizeof(int));
@@ -71,7 +79,12 @@ void generate_binary()
   qsort(linear_positions, NNZ, sizeof(int), &compar);
 
   // Now convert to array indices and fill
-  memset(data.rowDelimiters, 0, (N+1)*sizeof(int));
+  data.config[0] = N;
+  data.config[1] = NNZ;
+
+  memset(data.rowDelimiters, 0, (N_MAX+1)*sizeof(int));
+  memset(data.val, 0, NNZ_MAX*sizeof(TYPE));
+  memset(data.cols, 0, NNZ_MAX*sizeof(int));
   for( i=0; i<NNZ; i++ ) {
     data.val[i] = -100 + 200*((double)random()/RAND_MAX);
     data.cols[i] = linear_positions[i] % N;
@@ -82,7 +95,7 @@ void generate_binary()
     data.rowDelimiters[i] += data.rowDelimiters[i-1];
   }
   for( i=0; i<N; i++ )
-    data.vec[i] = 1.0;
+    data.vec[i] = -5 + 10*((double)random()/RAND_MAX);
   memset(data.out, 0, N*sizeof(TYPE));
 
   // Open and write

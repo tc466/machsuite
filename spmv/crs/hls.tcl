@@ -12,6 +12,6 @@ set_part virtex7
 create_clock -period 10
 source ./crs_dir
 csynth_design
-cosim_design -rtl systemc 
+#cosim_design -rtl systemc 
 
 exit
