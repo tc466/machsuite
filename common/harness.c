@@ -23,7 +23,7 @@ int main(int argc, char **argv)
   check_file = "check.data";
 
   // Load input data
-  input = malloc(INPUT_SIZE);
+  input = (char*) malloc(INPUT_SIZE);
   assert( input!=NULL && "Out of memory" );
   in_fd = open( in_file, O_RDONLY );
   
@@ -52,7 +52,7 @@ int main(int argc, char **argv)
   //#endif
 
   // Load check data
-  check = malloc(INPUT_SIZE);
+  check = (char*) malloc(INPUT_SIZE);
   assert( check!=NULL && "Out of memory" );
   check_fd = open( check_file, O_RDONLY );
   n = 0;
